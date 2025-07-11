@@ -12,12 +12,12 @@ Tools & Libraries Used:-
 Step by Step Implementation:-
 #Jupyter Notebook:
 1.	Import Required Libraries and Load Datasets:
-
-import pandas as pd
-records_df = pd.read_csv('Expense_Records_ClearBooks.csv')
-summary_df = pd.read_csv('Expense_Summary_By_Category.csv')
-print(records_df.head())
-print(summary_df.head())
+        
+        import pandas as pd
+        records_df = pd.read_csv('Expense_Records_ClearBooks.csv')
+        summary_df = pd.read_csv('Expense_Summary_By_Category.csv')
+        print(records_df.head())
+        print(summary_df.head())
 
 
 
@@ -31,23 +31,23 @@ print(summary_df.head())
 2.	Clean the Data:
 
 # Convert 'Date' column to datetime format
-records_df['Date'] = pd.to_datetime(records_df['Date'], errors='coerce')
+    records_df['Date'] = pd.to_datetime(records_df['Date'], errors='coerce')
 
 # Remove rows with missing/invalid entries
-records_df.dropna(subset=['Date', 'AmountINR', 'Category'], inplace=True)
+    records_df.dropna(subset=['Date', 'AmountINR', 'Category'], inplace=True)
 
 # Keep only positive amounts
-records_df = records_df[records_df['AmountINR'] > 0]
-
-records_df.reset_index(drop=True, inplace=True)
-records_df.head()
+    records_df = records_df[records_df['AmountINR'] > 0]
+    
+    records_df.reset_index(drop=True, inplace=True)
+    records_df.head()
 
 3.	Generate Summary by Category:
 
-generated_summary = records_df.groupby('Category')['AmountINR'].sum().reset_index()
-generated_summary = generated_summary.sort_values(by='AmountINR', ascending=False)
-generated_summary['AmountINR'] = generated_summary['AmountINR'].round(2)
-generated_summary
+        generated_summary = records_df.groupby('Category')['AmountINR'].sum().reset_index()
+        generated_summary = generated_summary.sort_values(by='AmountINR', ascending=False)
+        generated_summary['AmountINR'] = generated_summary['AmountINR'].round(2)
+        generated_summary
 
 
 
@@ -68,28 +68,28 @@ generated_summary
 4.	Compare with Provided Summary:
 
 # Round values for comparison
-generated_summary['AmountINR'] = generated_summary['AmountINR'].round(2)
-summary_df['AmountINR'] = summary_df['AmountINR'].round(2)
+    generated_summary['AmountINR'] = generated_summary['AmountINR'].round(2)
+    summary_df['AmountINR'] = summary_df['AmountINR'].round(2)
 
 # Merge and compare
-comparison = pd.merge(generated_summary, summary_df, on='Category', how='outer', suffixes=('_Generated', '_Provided'))
-
-comparison['Difference'] = comparison['AmountINR_Generated'] - comparison['AmountINR_Provided']
-
-print(comparison)
+    comparison = pd.merge(generated_summary, summary_df, on='Category', how='outer', suffixes=('_Generated', '_Provided'))
+    
+    comparison['Difference'] = comparison['AmountINR_Generated'] - comparison['AmountINR_Provided']
+    
+    print(comparison)
 
 <img width="734" height="233" alt="Screenshot 2025-07-10 010937" src="https://github.com/user-attachments/assets/02ff5047-739e-4416-a63b-afea3aa48e9b" />
 
 5.	Export the Cleaned Data and Summary & Visualizations:
 
-def main_menu():
-    while True:
-        print("\n--- ClearBooks Expense Tracker ---")
-        print("1. View All Records")
-        print("2. View Summary by Category")
-        print("3. Compare with Provided Summary")
-        print("4. Export Cleaned Data")
-        print("5. Exit")
+        def main_menu():
+           while True:
+            print("\n--- ClearBooks Expense Tracker ---")
+            print("1. View All Records")
+            print("2. View Summary by Category")
+            print("3. Compare with Provided Summary")
+            print("4. Export Cleaned Data")
+            print("5. Exit")
 
         choice = input("Select an option: ")
 
@@ -118,23 +118,23 @@ def main_menu():
             print("Invalid choice. Please enter a number from 1 to 5.")
 
 # Make sure this is at the bottom of your script
-if __name__ == '__main__':
+    if __name__ == '__main__':
     main_menu()
 
 <img width="802" height="167" alt="Screenshot 2025-07-10 011401" src="https://github.com/user-attachments/assets/677c7e35-a4e8-4134-87af-541767d09797" />
 
 # App.py : 
 
-import streamlit as st
-import pandas as pd
+    import streamlit as st
+    import pandas as pd
 
 # File names
-RECORDS_FILE = 'Expense_Records_ClearBooks.csv'
-SUMMARY_FILE = 'Expense_Summary_By_Category.csv'
+    RECORDS_FILE = 'Expense_Records_ClearBooks.csv'
+    SUMMARY_FILE = 'Expense_Summary_By_Category.csv'
 
 # Load and clean data
-@st.cache_data
-def load_data():
+    @st.cache_data
+    def load_data():
     try:
         records = pd.read_csv(RECORDS_FILE)
         summary = pd.read_csv(SUMMARY_FILE)
@@ -150,14 +150,14 @@ def load_data():
     return records, summary
 
 # Generate summary
-def generate_summary(df):
+    def generate_summary(df):
     summary = df.groupby('Category')['AmountINR'].sum().reset_index()
     summary = summary.sort_values(by='AmountINR', ascending=False)
     summary['AmountINR'] = summary['AmountINR'].round(2)
     return summary
 
 # Compare summaries
-def compare_summaries(generated, provided):
+    def compare_summaries(generated, provided):
     provided['AmountINR'] = provided['AmountINR'].round(2)
     comparison = pd.merge(
         generated, provided, on='Category', how='outer',
@@ -167,9 +167,9 @@ def compare_summaries(generated, provided):
     return comparison
 
 # Main app layout
-def main():
+    def main():
+    
     st.title("💰 ClearBooks Expense Tracker")
-
     records_df, summary_df = load_data()
     if records_df is None:
         return
@@ -211,7 +211,7 @@ if __name__ == "__main__":
 
 #Run Streamlit App Command:-
 
-python -m streamlit run app.py
+    python -m streamlit run app.py
 
 OUTPUT:
 
